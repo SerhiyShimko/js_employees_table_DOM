@@ -6,7 +6,7 @@ const tbody = table.tBodies[0];
 table.addEventListener('click', (e) => {
   const nowTarget = e.target;
 
-  if (nowTarget instanceof HTMLElement) {
+  if (nowTarget.tagName === 'TH' && nowTarget instanceof HTMLElement) {
     buttonWho(nowTarget);
   }
 });
