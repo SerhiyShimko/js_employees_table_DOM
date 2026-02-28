@@ -2,149 +2,59 @@
 
 const table = document.querySelector('table');
 const tbody = table.tBodies[0];
-const buttonName = table.tHead.rows[0].children[0];
-const buttonPosition = table.tHead.rows[0].children[1];
-const buttonOffice = table.tHead.rows[0].children[2];
-const buttonAge = table.tHead.rows[0].children[3];
-const buttonSalary = table.tHead.rows[0].children[4];
 
 table.addEventListener('click', (e) => {
-  const rowArray = Array.from(table.tBodies[0].children);
   const nowTarget = e.target;
 
   if (nowTarget instanceof HTMLElement) {
-    // натиснуто Name
-    if (nowTarget === buttonName) {
-      buttonName.classList.toggle('APC');
-      buttonPosition.classList.remove('APC');
-      buttonOffice.classList.remove('APC');
-      buttonAge.classList.remove('APC');
-      buttonSalary.classList.remove('APC');
-
-      const number = nowTarget.cellIndex;
-      const resultSort = rowArray.sort((firstRow, secondRow) => {
-        const firstRowChildren = firstRow.children[number].textContent;
-        const secondRowChildren = secondRow.children[number].textContent;
-
-        if (buttonName.classList.contains('APC')) {
-          return firstRowChildren.localeCompare(secondRowChildren);
-        } else {
-          return secondRowChildren.localeCompare(firstRowChildren);
-        }
-      });
-
-      resultSort.forEach((newTr) => {
-        tbody.append(newTr);
-      });
-    }
-
-    // натиснуто Position
-    if (nowTarget === buttonPosition) {
-      buttonPosition.classList.toggle('APC');
-      buttonName.classList.remove('APC');
-      buttonOffice.classList.remove('APC');
-      buttonAge.classList.remove('APC');
-      buttonSalary.classList.remove('APC');
-
-      const number = nowTarget.cellIndex;
-      const resultSort = rowArray.sort((firstRow, secondRow) => {
-        const firstRowChildren = firstRow.children[number].textContent;
-        const secondRowChildren = secondRow.children[number].textContent;
-
-        if (buttonPosition.classList.contains('APC')) {
-          return firstRowChildren.localeCompare(secondRowChildren);
-        } else {
-          return secondRowChildren.localeCompare(firstRowChildren);
-        }
-      });
-
-      resultSort.forEach((newTr) => {
-        tbody.append(newTr);
-      });
-    }
-
-    // натиснуто Office
-    if (nowTarget === buttonOffice) {
-      buttonOffice.classList.toggle('APC');
-      buttonName.classList.remove('APC');
-      buttonPosition.classList.remove('APC');
-      buttonAge.classList.remove('APC');
-      buttonSalary.classList.remove('APC');
-
-      const number = nowTarget.cellIndex;
-      const resultSort = rowArray.sort((firstRow, secondRow) => {
-        const firstRowChildren = firstRow.children[number].textContent;
-        const secondRowChildren = secondRow.children[number].textContent;
-
-        if (buttonOffice.classList.contains('APC')) {
-          return firstRowChildren.localeCompare(secondRowChildren);
-        } else {
-          return secondRowChildren.localeCompare(firstRowChildren);
-        }
-      });
-
-      resultSort.forEach((newTr) => {
-        tbody.append(newTr);
-      });
-    }
-
-    // натиснуто Office
-    if (nowTarget === buttonAge) {
-      buttonAge.classList.toggle('APC');
-      buttonName.classList.remove('APC');
-      buttonPosition.classList.remove('APC');
-      buttonOffice.classList.remove('APC');
-      buttonSalary.classList.remove('APC');
-
-      const number = nowTarget.cellIndex;
-      const resultSort = rowArray.sort((firstRow, secondRow) => {
-        const firstRowChildren = firstRow.children[number].textContent;
-        const secondRowChildren = secondRow.children[number].textContent;
-
-        if (buttonAge.classList.contains('APC')) {
-          return firstRowChildren - secondRowChildren;
-        } else {
-          return secondRowChildren - firstRowChildren;
-        }
-      });
-
-      resultSort.forEach((newTr) => {
-        tbody.append(newTr);
-      });
-    }
-
-    // натиснуто Salary
-    if (nowTarget === buttonSalary) {
-      buttonSalary.classList.toggle('APC');
-      buttonName.classList.remove('APC');
-      buttonPosition.classList.remove('APC');
-      buttonOffice.classList.remove('APC');
-      buttonAge.classList.remove('APC');
-
-      const number = nowTarget.cellIndex;
-      const resultSort = rowArray.sort((firstRow, secondRow) => {
-        const firstRowChildren = firstRow.children[number].textContent
-          .slice(1)
-          .split(',')
-          .join('');
-        const secondRowChildren = secondRow.children[number].textContent
-          .slice(1)
-          .split(',')
-          .join('');
-
-        if (buttonSalary.classList.contains('APC')) {
-          return firstRowChildren - secondRowChildren;
-        } else {
-          return secondRowChildren - firstRowChildren;
-        }
-      });
-
-      resultSort.forEach((newTr) => {
-        tbody.append(newTr);
-      });
-    }
+    buttonWho(nowTarget);
   }
 });
+
+function buttonWho(buttonNow) {
+  const rowArray = Array.from(table.tBodies[0].children);
+
+  for (const th of table.tHead.rows[0].children) {
+    if (th !== buttonNow) {
+      th.classList.remove('APC');
+    }
+  }
+
+  buttonNow.classList.toggle('APC');
+
+  const number = buttonNow.cellIndex;
+  const resultSort = rowArray.sort((firstRow, secondRow) => {
+    if (buttonNow.textContent === 'Salary') {
+      const firstRowChildrenSalary = firstRow.children[number].textContent
+        .slice(1)
+        .split(',')
+        .join('');
+      const secondRowChildrenSalary = secondRow.children[number].textContent
+        .slice(1)
+        .split(',')
+        .join('');
+
+      if (buttonNow.classList.contains('APC')) {
+        return firstRowChildrenSalary - secondRowChildrenSalary;
+      } else {
+        return secondRowChildrenSalary - firstRowChildrenSalary;
+      }
+    }
+
+    const firstRowChildren = firstRow.children[number].textContent;
+    const secondRowChildren = secondRow.children[number].textContent;
+
+    if (buttonNow.classList.contains('APC')) {
+      return firstRowChildren.localeCompare(secondRowChildren);
+    } else {
+      return secondRowChildren.localeCompare(firstRowChildren);
+    }
+  });
+
+  resultSort.forEach((newTr) => {
+    tbody.append(newTr);
+  });
+}
 
 tbody.addEventListener('click', (e) => {
   const nowTargetTr = e.target.closest('tr');
@@ -213,8 +123,8 @@ if (form instanceof HTMLElement) {
   optionSingapore.textContent = 'Singapore';
   optionLondon.setAttribute('value', 'London');
   optionLondon.textContent = 'London';
-  optionNewYork.setAttribute('value', 'NewYork');
-  optionNewYork.textContent = 'NewYork';
+  optionNewYork.setAttribute('value', 'New York');
+  optionNewYork.textContent = 'New York';
   optionEdinburgh.setAttribute('value', 'Edinburgh');
   optionEdinburgh.textContent = 'Edinburgh';
   optionSanFrancisco.setAttribute('value', 'San Francisco');
@@ -302,8 +212,7 @@ form.addEventListener('submit', (e) => {
   if (
     Number(age.value) < 18 ||
     Number(age.value) > 90 ||
-    namePerson.value.length < 4 ||
-    position.value.length <= 4
+    namePerson.value.length < 4
   ) {
     newNotification.classList.add('error');
     newNotification.textContent = 'Винникла помилка!';
