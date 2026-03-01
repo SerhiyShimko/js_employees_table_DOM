@@ -212,7 +212,9 @@ form.addEventListener('submit', (e) => {
   if (
     Number(age.value) < 18 ||
     Number(age.value) > 90 ||
-    namePerson.value.length < 4
+    namePerson.value.length < 4 ||
+    position.value === '' ||
+    salary.value === ''
   ) {
     newNotification.classList.add('error');
     newNotification.textContent = 'Винникла помилка!';
@@ -235,4 +237,45 @@ form.addEventListener('submit', (e) => {
     age.value = '';
     salary.value = '';
   }
+});
+
+table.addEventListener('dblclick', (e) => {
+  const nowTarget = e.target;
+  const content = nowTarget.textContent;
+
+  nowTarget.textContent = '';
+
+  const input = document.createElement('input');
+
+  input.classList.add('cell-input');
+  input.setAttribute('name', 'editing');
+  nowTarget.append(input);
+
+  input.addEventListener('blur', (eBlur) => {
+    const valueInput = input.value;
+
+    if (valueInput === '') {
+      input.remove();
+      nowTarget.textContent = content;
+
+      return;
+    }
+    input.remove();
+    nowTarget.textContent = valueInput;
+  });
+
+  input.addEventListener('keypress', (eKeypress) => {
+    if (eKeypress.code === 'Enter') {
+      const valueInput = input.value;
+
+      if (valueInput === '') {
+        input.remove();
+        nowTarget.textContent = content;
+
+        return;
+      }
+      input.remove();
+      nowTarget.textContent = valueInput;
+    }
+  });
 });
